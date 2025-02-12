@@ -1,101 +1,226 @@
-import Image from "next/image";
+// src/app/page.tsx
+"use client";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+import { useFormik } from 'formik';
+import { useState } from 'react';
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+interface FormData {
+  injuryCause: string;
+  incidentDate: string;
+  medicalMalpracticeInjury: string;
+  description: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  zipCode: string;
 }
+
+const Step1 = ({ formik }: { formik: any }) => (
+  <div>
+    <label htmlFor="injuryCause">What caused your Injury?</label>
+    <select id="injuryCause" {...formik.getFieldProps('injuryCause')}>
+      <option value="">Select an option</option>
+      <option value="motorVehicle">Motor Vehicle Accident</option>
+      <option value="workInjury">Injured at Work</option>
+      <option value="medicalMalpractice">Medical Malpractice</option>
+      <option value="wrongfulDeath">Wrongful Death</option>
+      <option value="dogBite">Dog Bite</option>
+      <option value="slipAndFall">Slip & Fall</option>
+      <option value="personalInjury">Personal Injury</option>
+      <option value="otherInjury">Other Injury</option>
+    </select>
+    {formik.touched.injuryCause && formik.errors.injuryCause ? (
+      <div>{formik.errors.injuryCause}</div>
+    ) : null}
+  </div>
+);
+
+const Step2 = ({ formik }: { formik: any }) => (
+  <div>
+    <label htmlFor="incidentDate">When did the incident occur?</label>
+    <select id="incidentDate" {...formik.getFieldProps('incidentDate')}>
+      <option value="">Select an option</option>
+      <option value="withinYear">Within the last year</option>
+      <option value="oneToTwoYears">1-2 years ago</option>
+      <option value="twoToThreeYears">2-3 years ago</option>
+      <option value="moreThanThreeYears">More than 3 years ago</option>
+    </select>
+    {formik.touched.incidentDate && formik.errors.incidentDate ? (
+      <div>{formik.errors.incidentDate}</div>
+    ) : null}
+  </div>
+);
+
+const Step3 = ({ formik }: { formik: any }) => (
+  <div>
+    <label htmlFor="medicalMalpracticeInjury">
+      What Injuries did you or your loved one sustain from Medical Malpractice?
+    </label>
+    <select id="medicalMalpracticeInjury" {...formik.getFieldProps('medicalMalpracticeInjury')}>
+      <option value="">Select an option</option>
+      <option value="lossOfAbility">Loss of Physical Ability</option>
+      <option value="birthInjury">Birth Injury</option>
+      <option value="death">Death of Patient</option>
+      <option value="misdiagnosis">Misdiagnosis</option>
+      <option value="other">Other</option>
+    </select>
+    {formik.touched.medicalMalpracticeInjury && formik.errors.medicalMalpracticeInjury ? (
+      <div>{formik.errors.medicalMalpracticeInjury}</div>
+    ) : null}
+  </div>
+);
+
+const Step4 = ({ formik }: { formik: any }) => (
+  <div>
+    <label htmlFor="description">Please describe what happened</label>
+    <textarea id="description" {...formik.getFieldProps('description')} />
+    {formik.touched.description && formik.errors.description ? (
+      <div>{formik.errors.description}</div>
+    ) : null}
+  </div>
+);
+
+const Step5 = ({ formik }: { formik: any }) => (
+  <div>
+    <label htmlFor="firstName">First Name</label>
+    <input type="text" id="firstName" {...formik.getFieldProps('firstName')} />
+    {formik.touched.firstName && formik.errors.firstName ? (
+      <div>{formik.errors.firstName}</div>
+    ) : null}
+
+    <label htmlFor="lastName">Last Name</label>
+    <input type="text" id="lastName" {...formik.getFieldProps('lastName')} />
+    {formik.touched.lastName && formik.errors.lastName ? (
+      <div>{formik.errors.lastName}</div>
+    ) : null}
+
+    <label htmlFor="email">Email Address</label>
+    <input type="email" id="email" {...formik.getFieldProps('email')} />
+    {formik.touched.email && formik.errors.email ? (
+      <div>{formik.errors.email}</div>
+    ) : null}
+
+    <label htmlFor="phone">Phone Number</label>
+    <input type="tel" id="phone" {...formik.getFieldProps('phone')} />
+    {formik.touched.phone && formik.errors.phone ? (
+      <div>{formik.errors.phone}</div>
+    ) : null}
+
+    <label htmlFor="zipCode">Zip / Postal Code</label>
+    <input type="text" id="zipCode" {...formik.getFieldProps('zipCode')} />
+    {formik.touched.zipCode && formik.errors.zipCode ? (
+      <div>{formik.errors.zipCode}</div>
+    ) : null}
+  </div>
+);
+
+const MyForm = () => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const formik = useFormik<FormData>({
+    initialValues: {
+      injuryCause: '',
+      incidentDate: '',
+      medicalMalpracticeInjury: '',
+      description: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      zipCode: '',
+    },
+    validate: (values) => {
+      const errors: Partial<FormData> = {};
+
+      if (!values.injuryCause) errors.injuryCause = 'Required';
+      if (!values.incidentDate) errors.incidentDate = 'Required';
+      if (values.injuryCause === 'medicalMalpractice' && !values.medicalMalpracticeInjury) errors.medicalMalpracticeInjury = 'Required';
+      if (!values.description) errors.description = 'Required';
+      if (currentStep === 5) { // Validation for step 5
+        if (!values.firstName) errors.firstName = 'Required';
+        if (!values.lastName) errors.lastName = 'Required';
+        if (!values.email) errors.email = 'Required';
+        if (!values.phone) errors.phone = 'Required';
+        if (!values.zipCode) errors.zipCode = 'Required';
+      }
+
+      return errors;
+    },
+
+    onSubmit: (values) => {
+      setIsSubmitting(true);
+      setTimeout(() => {
+        console.log(values);
+        setIsSubmitting(false);
+        alert("Form submitted successfully!");
+      }, 500);
+    },
+  });
+
+  const handleNext = () => {
+    formik.validateForm().then(() => {
+      if (Object.keys(formik.errors).length === 0) {
+        setCurrentStep(currentStep + 1);
+      }
+    });
+  };
+
+  const handlePrev = () => setCurrentStep(currentStep - 1);
+
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return <Step1 formik={formik} />;
+      case 2:
+        return <Step2 formik={formik} />;
+      case 3:
+        return <Step3 formik={formik} />;
+      case 4:
+        return <Step4 formik={formik} />;
+      case 5:
+        return <Step5 formik={formik} />;
+      default:
+        return null;
+    }
+  };return (
+    <form onSubmit={formik.handleSubmit} className="container mx-auto p-4">
+      {renderStep()}
+  
+      <div className="mt-4">
+        {currentStep > 1 && (
+          <button
+            type="button"
+            onClick={handlePrev}
+            disabled={isSubmitting}
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
+          >
+            Previous
+          </button>
+        )}
+        {currentStep < 5 && (
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={isSubmitting}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Next
+          </button>
+        )}
+        {currentStep === 5 && (
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Submit
+          </button>
+        )}
+        {isSubmitting && <p>Submitting...</p>}
+      </div>
+    </form>
+  );}
+
+  export default MyForm; 
